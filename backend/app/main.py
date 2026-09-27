@@ -6,11 +6,35 @@ from app.routes.tasks import tasks as tasks_router
 from app.routes.auth import auth as auth_router
 from app.routes.categories import categories as categories_router
 
+tags_metadata = [
+    {
+        "name": "Authentication",
+        "description": "Login and session handling via Supabase Auth.",
+    },
+    {
+        "name": "Tasks",
+        "description": "CRUD operations on tasks. Each task belongs to the "
+                        "authenticated user and may optionally be linked to a category.",
+    },
+    {
+        "name": "Categories",
+        "description": "CRUD operations on categories. Tasks can be grouped "
+                        "under a category via `category_id`.",
+    },
+]
 
 app = FastAPI(
-    title="Bucket Backend API Documentation",
-    description="A simple FastAPI application that uses Supabase for authentication and data storage.",
+    title="Bucket API",
+    description=(
+        "A task-management API built with FastAPI and Supabase, used as a "
+        "learning project to practice authentication, row-level security, "
+        "relational data modeling, and production-grade error handling.\n\n"
+        "All endpoints except `/auth/login` require a Bearer token obtained "
+        "from that endpoint."
+    ),
     version="1.0.0",
+    openapi_tags=tags_metadata,
+    contact={"name": "Firas Dabbabi"},
 )
 
 app.include_router(tasks_router)
@@ -37,7 +61,6 @@ def validation_error_handler(request: Request, exc: RequestValidationError):
     )
 
     
-
-@app.get("/")
+@app.get("/", summary="Health check", description="Simple liveness check — returns a static message.")
 def root():
     return {"message": "Hello, FastAPI!"}

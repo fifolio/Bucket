@@ -12,7 +12,11 @@ tasks = APIRouter(
 )
 
 
-@tasks.get("", response_model=list[TaskResponse])
+@tasks.get("", 
+           response_model=list[TaskResponse], 
+           summary="List all tasks",
+           description="Returns every task belonging to the authenticated user, "
+                 "with its linked category embedded (if any).")
 def get_tasks(current_user=Depends(get_current_user)):
     client = get_user_supabase(current_user["token"])
     try:
@@ -22,7 +26,10 @@ def get_tasks(current_user=Depends(get_current_user)):
     return response.data
 
 
-@tasks.get("/{task_id}", response_model=TaskResponse)
+@tasks.get("/{task_id}", 
+           response_model=TaskResponse, 
+           summary="Get a single task",
+           responses={404: {"description": "Task not found"}})
 def get_task(task_id: int, current_user=Depends(get_current_user)):
     client = get_user_supabase(current_user["token"])
     try:

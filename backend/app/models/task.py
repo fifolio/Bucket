@@ -1,11 +1,21 @@
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 from app.models.category import CategoryResponse
 
 # input model
 class TaskCreate(BaseModel):
-    title: str = Field(min_length=1, max_length=200)
-    description: str | None = Field(default=None, min_length=1, max_length=2000)
-    category_id: int | None = None
+    title: str = Field(min_length=1, max_length=200, description="Short title for the task.")
+    description: str | None = Field(default=None, min_length=1, max_length=2000, description="Optional longer description of the task.")
+    category_id: int | None = Field(default=None, description="ID of an existing category to file this task under. Omit for uncategorized.")
+
+    model_config = ConfigDict(
+        json_schema_extra={
+            "example": {
+                "title": "Finish step 15",
+                "description": "Add OpenAPI descriptions and examples to all routes.",
+                "category_id": 1,
+            }
+        }
+    )
 
 
 # output model
