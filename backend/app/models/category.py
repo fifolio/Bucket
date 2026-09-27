@@ -1,7 +1,7 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 class CategoryCreate(BaseModel):
-    name: str
+    name: str = Field(min_length=1, max_length=200)
 
 class CategoryResponse(BaseModel):
     id: int
@@ -9,5 +9,5 @@ class CategoryResponse(BaseModel):
     created_at: str
 
 class CategoryUpdate(BaseModel):
-    name: str | None = None
+    name: str | None = Field(default=None, min_length=1, max_length=200)
 
