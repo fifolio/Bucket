@@ -18,7 +18,7 @@ def get_tasks(current_user=Depends(get_current_user)):
         response = (
             client
             .table("tasks")
-            .select("*")
+            .select("*, category:categories(*)")
             .execute()
         )
 
